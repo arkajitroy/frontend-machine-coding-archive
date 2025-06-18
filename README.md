@@ -5,3 +5,4 @@ This repository will be containing all the most asked machine coding rounds ques
 ## List of questions
 
 1. React Virtualized List / Virtualization
+2. React Pagination
