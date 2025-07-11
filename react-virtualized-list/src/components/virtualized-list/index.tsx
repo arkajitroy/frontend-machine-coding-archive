@@ -7,15 +7,16 @@ interface VirtualizedListProps {
   items: Item[];
 }
 
+// This component has been created using a custom library react-virtuoso
+
 const VirtualizedList: React.FC<VirtualizedListProps> = ({ items }) => {
   return (
     <div className={styles.virtuoso_container}>
       <h3>Virtualized List with react-virtuoso</h3>
-      {/* Virtuoso handles virtualization internally */}
       <Virtuoso
-        style={{ height: 600 }} // Fixed height for virtual scroll window
+        style={{ height: 600 }}
         data={items}
-        itemContent={(index, item) => (
+        itemContent={(_index, item) => (
           <div className={styles.list_item} key={item.id}>
             <p>{item.content}</p>
           </div>

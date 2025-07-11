@@ -19,7 +19,7 @@ const CustomVirtualizedList: React.FC<CustomVirtualizedListProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Memoized calculations to improve performance
-  const { startIndex, endIndex, visibleItems, topPadding } = useMemo(() => {
+  const { startIndex, visibleItems } = useMemo(() => {
     const start = Math.max(0, Math.floor(scrollTop / itemHeight) - BUFFER_ROWS);
     const end = Math.min(
       items.length,
@@ -48,14 +48,6 @@ const CustomVirtualizedList: React.FC<CustomVirtualizedListProps> = ({
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
-  console.log("debug-custom-virtual", {
-    BUFFER_ROWS,
-    startIndex,
-    endIndex,
-    topPadding,
-    visibleItems,
-  });
 
   return (
     <div className={styles.custom_virtual_container} style={{ height: containerHeight }}>
