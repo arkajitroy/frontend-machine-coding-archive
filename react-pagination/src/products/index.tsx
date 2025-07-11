@@ -22,37 +22,38 @@ const ProductList: React.FC = () => {
   const cacheRef = useRef<Record<number, Product[]>>({});
 
   const fetchProducts = useCallback(
-    debounce(async (page: number) => {
-      // check cache
-      if (cacheRef.current[page]) {
-        setProducts(cacheRef.current[page]);
-        return;
-      }
+    () =>
+      debounce(async (page: number) => {
+        // check cache
+        if (cacheRef.current[page]) {
+          setProducts(cacheRef.current[page]);
+          return;
+        }
 
-      setLoading(true);
-      setError(null);
+        setLoading(true);
+        setError(null);
 
-      try {
-        const response = await fetch(API_ENDPOINT);
-        if (!response.ok) throw new Error("Failed to fetch products!");
+        try {
+          const response = await fetch(API_ENDPOINT);
+          if (!response.ok) throw new Error("Failed to fetch products!");
 
-        const allProducts: Product[] = await response.json();
-        setTotalItems(allProducts.length);
+          const allProducts: Product[] = await response.json();
+          setTotalItems(allProducts.length);
 
-        // simulate pagination
-        const startIdx = (page - 1) * ITEMS_PER_PAGE;
-        const endIdx = startIdx + ITEMS_PER_PAGE;
-        // paginated items
-        const paginated = allProducts.slice(startIdx, endIdx);
+          // simulate pagination
+          const startIdx = (page - 1) * ITEMS_PER_PAGE;
+          const endIdx = startIdx + ITEMS_PER_PAGE;
+          // paginated items
+          const paginated = allProducts.slice(startIdx, endIdx);
 
-        cacheRef.current[page] = paginated;
-        setProducts(paginated);
-      } catch (err) {
-        setError(getErrorMessage(err, "An error occurred while fetching products."));
-      } finally {
-        setLoading(false);
-      }
-    }, 300),
+          cacheRef.current[page] = paginated;
+          setProducts(paginated);
+        } catch (err) {
+          setError(getErrorMessage(err, "An error occurred while fetching products."));
+        } finally {
+          setLoading(false);
+        }
+      }, 300),
     []
   );
 
@@ -62,7 +63,7 @@ const ProductList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProducts(currentPage);
+    fetchProducts()(currentPage);
   }, [currentPage, fetchProducts]);
 
   if (error) {
